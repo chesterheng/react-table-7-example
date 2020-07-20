@@ -5,6 +5,7 @@
 - [Table of Contents](#table-of-contents)
   - [Project Setup](#project-setup)
   - [Prepare Data](#prepare-data)
+  - [Define Columns](#define-columns)
 
 ## Project Setup
 
@@ -35,6 +36,40 @@ const App = () => {
 
   return <div>Hello</div>
 }
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Define Columns
+
+![](data-1.png)
+
+```javascript
+const columns = useMemo(
+  () => [
+    {
+      Header: "Title",
+      accessor: "name.title",
+    },
+    {
+      Header: "First Name",
+      accessor: "name.first",
+    },
+    {
+      Header: "Last Name",
+      accessor: "name.last",
+    },
+    {
+      Header: "Email",
+      accessor: "email",
+    },
+    {
+      Header: "City",
+      accessor: "location.city",
+    },
+  ],
+  []
+)
 ```
 
 **[⬆ back to top](#table-of-contents)**

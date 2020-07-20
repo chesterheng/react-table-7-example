@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 
 const App = () => {
   const [data, setData] = useState([])
@@ -12,6 +12,32 @@ const App = () => {
     }
     doFetch()
   }, [])
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Title",
+        accessor: "name.title",
+      },
+      {
+        Header: "First Name",
+        accessor: "name.first",
+      },
+      {
+        Header: "Last Name",
+        accessor: "name.last",
+      },
+      {
+        Header: "Email",
+        accessor: "email",
+      },
+      {
+        Header: "City",
+        accessor: "location.city",
+      },
+    ],
+    []
+  )
   console.log(data)
   return <div>Hello</div>
 }
