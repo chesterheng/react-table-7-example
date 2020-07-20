@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react"
 import { Container } from "reactstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
 import TableContainer from "./TableContainer"
+import { SelectColumnFilter } from './filters';
 
 const App = () => {
   const [data, setData] = useState([])
@@ -20,7 +21,10 @@ const App = () => {
       {
         Header: "Title",
         accessor: "name.title",
-        disableSortBy: true
+        disableSortBy: true,
+        Filter: SelectColumnFilter,
+        filter: 'equals', // by default, filter: 'text', but in our case we don't want to filter options like text, we want to find exact match of selected option.
+        // disableFilters: true
       },
       {
         Header: "First Name",
@@ -40,6 +44,8 @@ const App = () => {
       },
       {
         Header: 'Hemisphere',
+        Filter: SelectColumnFilter,
+        filter: 'equals',
         accessor: (values) => {
           const { latitude, longitude } = values.location.coordinates;
           const first = Number(latitude) > 0 ? 'N' : 'S';

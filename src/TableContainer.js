@@ -1,6 +1,7 @@
 import React from "react"
-import { useTable, useSortBy } from "react-table"
+import { useTable, useSortBy, useFilters } from "react-table"
 import { Table } from 'reactstrap';
+import { Filter, DefaultColumnFilter } from './filters';
 
 const TableContainer = ({ columns, data }) => {
   const {
@@ -13,7 +14,9 @@ const TableContainer = ({ columns, data }) => {
     {
       columns,
       data,
+      defaultColumn: { Filter: DefaultColumnFilter }
     },
+    useFilters,
     useSortBy
   )
 
@@ -29,10 +32,13 @@ const TableContainer = ({ columns, data }) => {
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render("Header")}
-                {generateSortingIndicator(column)}
-              </th>
+              <th {...column.getHeaderProps()}>
+                <div {...column.getSortByToggleProps()}>
+                  {column.render("Header")}
+                  {generateSortingIndicator(column)}
+                </div>
+                <Filter column={column} />
+            </th>
             ))}
           </tr>
         ))}

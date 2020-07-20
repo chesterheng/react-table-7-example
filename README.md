@@ -10,6 +10,7 @@
   - [Add Bootstrap Table Style](#add-bootstrap-table-style)
   - [Custom Cell](#custom-cell)
   - [Sorting - useSortBy hook](#sorting---usesortby-hook)
+  - [Filtering - useFilters hook](#filtering---usefilters-hook)
 
 ## Project Setup
 
@@ -284,6 +285,115 @@ const generateSortingIndicator = column => {
   accessor: 'name.title'
   disableSortBy: true
 },
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Filtering - useFilters hook
+
+```javascript
+// filters.js
+import React from "react"
+import { Input, CustomInput } from "reactstrap"
+
+export const Filter = ({ column }) => {
+  return (
+    <div style={{ marginTop: 5 }}>
+      {column.canFilter && column.render("Filter")}
+    </div>
+  )
+}
+
+export const DefaultColumnFilter = ({
+  column: {
+    filterValue,
+    setFilter,
+    preFilteredRows: { length },
+  },
+}) => {
+  return (
+    <Input
+      value={filterValue || ""}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+      placeholder={`search (${length}) ...`}
+    />
+  )
+}
+
+export const SelectColumnFilter = ({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}) => {
+  const options = React.useMemo(() => {
+    const options = new Set()
+    preFilteredRows.forEach(row => {
+      options.add(row.values[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
+
+  return (
+    <CustomInput
+      id="custom-select"
+      type="select"
+      value={filterValue}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+    >
+      <option value="">All</option>
+      {options.map(option => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </CustomInput>
+  )
+}
+```
+
+```javascript
+// TableContainer.js
+import { useTable, useSortBy, useFilters } from "react-table"
+import { Filter, DefaultColumnFilter } from './filters';
+
+const {
+  getTableProps,
+  getTableBodyProps,
+  headerGroups,
+  rows,
+  prepareRow,
+} = useTable(
+  {
+    columns,
+    data,
+    defaultColumn: { Filter: DefaultColumnFilter }
+  },
+  useFilters,
+  useSortBy
+)
+
+<th {...column.getHeaderProps()}>
+  <div {...column.getSortByToggleProps()}>
+    {column.render("Header")}
+    {generateSortingIndicator(column)}
+  </div>
+  <Filter column={column} />
+</th>
+```
+
+```javascript
+// App.js
+import { SelectColumnFilter } from './filters';
+
+{
+  Header: 'Title',
+  accessor: 'name.title',
+  Filter: SelectColumnFilter,
+  filter: 'equals', // by default, filter: 'text', but in our case we don't want to filter options like text, we want to find exact match of selected option.
+  disableFilters: true
+}
 ```
 
 **[⬆ back to top](#table-of-contents)**
