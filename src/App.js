@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react"
+import { Container } from "reactstrap"
+import "bootstrap/dist/css/bootstrap.min.css"
 import TableContainer from "./TableContainer"
 
 const App = () => {
@@ -39,7 +41,11 @@ const App = () => {
     ],
     []
   )
-  return <TableContainer columns={columns} data={data} />
+  return (
+    <Container style={{ marginTop: 100 }}>
+      <TableContainer columns={columns} data={data} />
+    </Container>
+  )
 }
 
 export default App;

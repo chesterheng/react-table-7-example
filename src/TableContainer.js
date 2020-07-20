@@ -1,5 +1,6 @@
 import React from "react"
 import { useTable } from "react-table"
+import { Table } from 'reactstrap';
 
 const TableContainer = ({ columns, data }) => {
   const {
@@ -16,7 +17,7 @@ const TableContainer = ({ columns, data }) => {
   return (
     // If you're curious what props we get as a result of calling our getter functions (getTableProps(), getRowProps())
     // Feel free to use console.log()  This will help you better understand how react table works underhood.
-    <table {...getTableProps()}>
+    <Table bordered hover {...getTableProps()}>
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
@@ -39,7 +40,7 @@ const TableContainer = ({ columns, data }) => {
           )
         })}
       </tbody>
-    </table>
+    </Table>
   )
 }
 

@@ -7,6 +7,7 @@
   - [Prepare Data](#prepare-data)
   - [Define Columns](#define-columns)
   - [Table Rendering - useTable hook](#table-rendering---usetable-hook)
+  - [Add Bootstrap Table Style](#add-bootstrap-table-style)
 
 ## Project Setup
 
@@ -125,6 +126,33 @@ const TableContainer = ({ columns, data }) => {
 }
 
 export default TableContainer
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Add Bootstrap Table Style
+
+```console
+npm i bootstrap reactstrap
+```
+
+```javascript
+// App.js
+import { Container } from "reactstrap"
+import "bootstrap/dist/css/bootstrap.min.css"
+
+return (
+  <Container style={{ marginTop: 100 }}>
+    <TableContainer columns={columns} data={data} />
+  </Container>
+)
+```
+
+```javascript
+// TableContainer.js
+import { Table } from 'reactstrap';
+
+<Table bordered hover {...getTableProps()}>
 ```
 
 **[⬆ back to top](#table-of-contents)**
