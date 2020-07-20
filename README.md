@@ -9,6 +9,7 @@
   - [Table Rendering - useTable hook](#table-rendering---usetable-hook)
   - [Add Bootstrap Table Style](#add-bootstrap-table-style)
   - [Custom Cell](#custom-cell)
+  - [Sorting - useSortBy hook](#sorting---usesortby-hook)
 
 ## Project Setup
 
@@ -241,6 +242,48 @@ import { Table } from 'reactstrap';
     );
   }
 }
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Sorting - useSortBy hook
+
+```javascript
+// TableContainer.js
+import { useTable, useSortBy } from "react-table"
+
+const {
+  getTableProps,
+  getTableBodyProps,
+  headerGroups,
+  rows,
+  prepareRow,
+} = useTable(
+  {
+    columns,
+    data,
+  },
+  useSortBy
+)
+
+const generateSortingIndicator = column => {
+  return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""
+}
+
+<th {...column.getHeaderProps(column.getSortByToggleProps())}>
+  {column.render("Header")}
+  {generateSortingIndicator(column)}
+</th>
+```
+
+```javascript
+// App.js
+// disable sorting in a particular column
+{
+  Header: 'Title',
+  accessor: 'name.title'
+  disableSortBy: true
+},
 ```
 
 **[⬆ back to top](#table-of-contents)**

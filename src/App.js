@@ -10,7 +10,6 @@ const App = () => {
       const response = await fetch("https://randomuser.me/api/?results=100")
       const body = await response.json()
       const contacts = body.results
-      console.log(contacts)
       setData(contacts)
     }
     doFetch()
@@ -21,6 +20,7 @@ const App = () => {
       {
         Header: "Title",
         accessor: "name.title",
+        disableSortBy: true
       },
       {
         Header: "First Name",
@@ -48,7 +48,6 @@ const App = () => {
         },
         // we can also write code below as a separate React Component
         Cell: ({ cell }) => {
-          console.log(cell);
           const { value } = cell;
 
           const pickEmoji = (value) => {
