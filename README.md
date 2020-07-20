@@ -11,6 +11,7 @@
   - [Custom Cell](#custom-cell)
   - [Sorting - useSortBy hook](#sorting---usesortby-hook)
   - [Filtering - useFilters hook](#filtering---usefilters-hook)
+  - [Sub Components - useExpanded hook](#sub-components---useexpanded-hook)
 
 ## Project Setup
 
@@ -396,4 +397,93 @@ import { SelectColumnFilter } from './filters';
 }
 ```
 
+**[⬆ back to top](#table-of-contents)**
+
+## Sub Components - useExpanded hook
+
+```javascript
+import { useTable, useSortBy, useFilters, useExpanded } from 'react-table';
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    visibleColumns,
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn: { Filter: DefaultColumnFilter },
+    },
+    useFilters,
+    useSortBy,
+    useExpanded
+  );
+
+<Fragment key={row.getRowProps().key}>
+  <tr>
+    {row.cells.map(cell => {
+      return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+    })}
+  </tr>
+  {row.isExpanded && (
+    <tr>
+      <td colSpan={visibleColumns.length}>{renderRowSubComponent(row)}</td>
+    </tr>
+  )}
+</Fragment>
+```
+
+```javascript
+// App.js
+{
+  Header: () => null,
+  id: 'expander', // 'id' is required
+  Cell: ({ row }) => (
+    <span {...row.getToggleRowExpandedProps()}>
+      {row.isExpanded ? '👇' : '👉'}
+    </span>
+  )
+},
+
+import {
+  Container,
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+} from "reactstrap"
+
+const renderRowSubComponent = row => {
+  const {
+    name: { first, last },
+    location: { city, street, postcode },
+    picture,
+    cell,
+  } = row.original
+  return (
+    <Card style={{ width: "18rem", margin: "0 auto" }}>
+      <CardImg top src={picture.large} alt="Card image cap" />
+      <CardBody>
+        <CardTitle>
+          <strong>{`${first} ${last}`} </strong>
+        </CardTitle>
+        <CardText>
+          <strong>Phone</strong>: {cell} <br />
+          <strong>Address:</strong> {`${street.name} ${street.number} - ${postcode} - ${city}`}
+        </CardText>
+      </CardBody>
+    </Card>
+  )
+}
+
+<TableContainer
+  columns={columns}
+  data={data}
+  renderRowSubComponent={renderRowSubComponent}
+/>
+```
 **[⬆ back to top](#table-of-contents)**

@@ -1,5 +1,13 @@
 import React, { useEffect, useState, useMemo } from "react"
-import { Container } from "reactstrap"
+import {
+  Container,
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+} from "reactstrap"
+
 import "bootstrap/dist/css/bootstrap.min.css"
 import TableContainer from "./TableContainer"
 import { SelectColumnFilter } from './filters';
@@ -18,6 +26,15 @@ const App = () => {
 
   const columns = useMemo(
     () => [
+      {
+        Header: () => null,
+        id: 'expander', // 'id' is required
+        Cell: ({ row }) => (
+          <span {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </span>
+        )
+      },
       {
         Header: "Title",
         accessor: "name.title",
@@ -75,9 +92,37 @@ const App = () => {
     ],
     []
   )
+
+  const renderRowSubComponent = row => {
+    const {
+      name: { first, last },
+      location: { city, street, postcode },
+      picture,
+      cell,
+    } = row.original
+    return (
+      <Card style={{ width: "18rem", margin: "0 auto" }}>
+        <CardImg top src={picture.large} alt="Card image cap" />
+        <CardBody>
+          <CardTitle>
+            <strong>{`${first} ${last}`} </strong>
+          </CardTitle>
+          <CardText>
+            <strong>Phone</strong>: {cell} <br />
+            <strong>Address:</strong> {`${street.name} ${street.number} - ${postcode} - ${city}`}
+          </CardText>
+        </CardBody>
+      </Card>
+    )
+  }
+  
   return (
     <Container style={{ marginTop: 100 }}>
-      <TableContainer columns={columns} data={data} />
+      <TableContainer 
+        columns={columns} 
+        data={data}
+        renderRowSubComponent={renderRowSubComponent}
+      />
     </Container>
   )
 }
