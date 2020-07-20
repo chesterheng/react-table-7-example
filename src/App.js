@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react"
+import TableContainer from "./TableContainer"
 
 const App = () => {
   const [data, setData] = useState([])
@@ -38,8 +39,7 @@ const App = () => {
     ],
     []
   )
-  console.log(data)
-  return <div>Hello</div>
+  return <TableContainer columns={columns} data={data} />
 }
 
 export default App;
