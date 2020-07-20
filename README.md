@@ -8,6 +8,7 @@
   - [Define Columns](#define-columns)
   - [Table Rendering - useTable hook](#table-rendering---usetable-hook)
   - [Add Bootstrap Table Style](#add-bootstrap-table-style)
+  - [Custom Cell](#custom-cell)
 
 ## Project Setup
 
@@ -68,6 +69,34 @@ const columns = useMemo(
     {
       Header: "City",
       accessor: "location.city",
+    },
+    {
+      Header: 'Hemisphere',
+      accessor: (values) => {
+        const { latitude, longitude } = values.location.coordinates;
+        const first = Number(latitude) > 0 ? 'N' : 'S';
+        const second = Number(longitude) > 0 ? 'E' : 'W';
+        return first + '/' + second;
+      },
+      // we can also write code below as a separate React Component
+      Cell: ({ cell }) => {
+        const { value } = cell;
+
+        const pickEmoji = (value) => {
+          let first = value[0]; // N or S
+          let second = value[2]; // E or W
+          const options = ['⇖', '⇗', '⇙', '⇘'];
+          let num = first === 'N' ? 0 : 2;
+          num = second === 'E' ? num + 1 : num;
+          return options[num];
+        };
+
+        return (
+          <div style={{ textAlign: 'center', fontSize: 18 }}>
+            {pickEmoji(value)}
+          </div>
+        );
+      }
     },
   ],
   []
@@ -153,6 +182,65 @@ return (
 import { Table } from 'reactstrap';
 
 <Table bordered hover {...getTableProps()}>
+```
+
+**[⬆ back to top](#table-of-contents)**
+
+## Custom Cell
+
+```javascript
+{
+  Header: 'Color',
+  accessor: 'color'
+    // Cell has access to row values. If you are curious what is inside cellProps, you can  console log it
+  Cell: (cellProps) => {
+    return <YourReactComponent {...cellProps}/>
+  }
+}
+```
+
+```javascript
+{
+  Header: 'Hemisphere',
+  accessor: (values) => {
+    const { latitude, longitude } = values.location.coordinates;
+    const first = Number(latitude) > 0 ? 'N' : 'S';
+    const second = Number(longitude) > 0 ? 'E' : 'W';
+    return first + '/' + second;
+  }
+}
+```
+
+```javascript
+{
+  Header: 'Hemisphere',
+  // In accessor, we will destructure values for latitude and longitude to determine which hemisphere the user is on.
+  accessor: (values) => {
+    const { latitude, longitude } = values.location.coordinates;
+    const first = Number(latitude) > 0 ? 'N' : 'S';
+    const second = Number(longitude) > 0 ? 'E' : 'W';
+    return first + '/' + second;
+  },
+  // we can also write code below as a separate React Component
+  Cell: ({ cell }) => {
+    const { value } = cell;
+
+    const pickEmoji = (value) => {
+      let first = value[0]; // N or S
+      let second = value[2]; // E or W
+      const options = ['⇖', '⇗', '⇙', '⇘'];
+      let num = first === 'N' ? 0 : 2;
+      num = second === 'E' ? num + 1 : num;
+      return options[num];
+    };
+
+    return (
+      <div style={{ textAlign: 'center', fontSize: 18 }}>
+        {pickEmoji(value)}
+      </div>
+    );
+  }
+}
 ```
 
 **[⬆ back to top](#table-of-contents)**
